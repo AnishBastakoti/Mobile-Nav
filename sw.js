@@ -94,7 +94,7 @@ window.matchMedia('(display-mode: standalone)').addEventListener('change', (evt)
 
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
+    navigator.serviceWorker.register("sw.js");
   }
 });
 
@@ -162,10 +162,4 @@ self.addEventListener("fetch", (event) => {
       })()
     );
   }
-
-  // If our if() condition is false, then this fetch handler won't intercept the
-  // request. If there are any other fetch handlers registered, they will get a
-  // chance to call event.respondWith(). If no fetch handlers call
-  // event.respondWith(), the request will be handled by the browser as if there
-  // were no service worker involvement.
 });
