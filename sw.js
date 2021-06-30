@@ -38,7 +38,7 @@ self.addEventListener("fetch", (e) => {
 });*/
 
 // Initialize deferredPrompt for use later to show browser install prompt.
-let deferredPrompt;
+/*let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
   // Prevent the mini-infobar from appearing on mobile
@@ -162,4 +162,53 @@ self.addEventListener("fetch", (event) => {
       })()
     );
   }
+});*/
+
+
+
+
+//basic service Worker
+
+self.addEventListener('install', event => {
+  console.log('Install event!');
+});
+self.addEventListener('activate', event => {
+  console.log('Activate event!');
+});
+self.addEventListener('fetch', event => {
+  console.log('Fetch intercepted for:', event.request.url);
+});
+
+const cacheName = 'cache-v1';
+const resourceToPrecache = [
+  '/',
+  'index.html',
+  'style-main.css',
+  'src/img/a1.png',
+  'src/img/a2.png',
+  'src/img/a3.png',
+  'src/img/a4.png',
+
+];
+
+//install event
+
+self.addEventListener('install', event => {
+  console.log('Service Worker install event!');
+  event.waitUnitl(
+    caches.open(cacheName)
+    .then(cache => {
+      return cache.addAll(resourcesToPrecache);
+    })
+  );
+});
+
+//fetch event
+
+self.addEventListener('fetch', event => {
+  event.respondWith(caches.match(event.request)
+    .then(cachedResponse => {
+      return cachedResponse || fetch(event.request);
+    })
+  );
 });
